@@ -83,7 +83,7 @@ ORDER BY numpurchasers DESC;
 
 # STEP 9
 df_customers = pd.read_sql("""
-SELECT COUNT(c.customerNumber) AS n_customers, o.officeCode, o.city
+SELECT COUNT(DISTINCT c.customerNumber) AS n_customers, o.officeCode, o.city
 FROM offices o
 JOIN employees e ON o.officeCode = e.officeCode
 JOIN customers c ON e.employeeNumber = c.salesRepEmployeeNumber
@@ -106,7 +106,8 @@ WHERE od.productCode IN (
     JOIN orders o_sub ON od_sub.orderNumber = o_sub.orderNumber
     GROUP BY p.productCode
     HAVING COUNT(DISTINCT o_sub.customerNumber) < 20
-);
+)
+ORDER BY e.employeeNumber;
 """, conn)
 
 conn.close()
