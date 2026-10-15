@@ -102,6 +102,21 @@ ORDER BY n_customers DESC;
 
 # STEP 10
 # Replace None with your code
-df_under_20 = None
+df_under_20 = pd.read_sql("""
+SELECT DISTINCT e.employee_number, e.first_name, e.last_name, off.city, off.id AS office_code
+FROM employees e
+JOIN offices off ON e.office_id = off.id
+JOIN customers c ON e.employee_number = c.sales_rep_employee_number
+JOIN orders o ON c.customer_number = o.customer_number
+JOIN orderdetails od ON o.order_number = od.order_number
+WHERE od.product_code IN (
+    SELECT p.product_code
+    FROM products p
+    JOIN orderdetails od_sub ON p.product_code = od_sub.product_code
+    JOIN orders o_sub ON od_sub.order_number = o_sub.order_number
+    GROUP BY p.product_code
+    HAVING COUNT(DISTINCT o_sub.customer_number) < 20
+);
+""", conn)
 
 conn.close()
