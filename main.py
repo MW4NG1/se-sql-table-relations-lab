@@ -58,11 +58,25 @@ ORDER BY CAST(p.amount AS REAL) DESC;
 
 # STEP 6
 # Replace None with your code
-df_credit = None
+df_credit = pd.read_sql("""
+SELECT e.employee_number, e.first_name, e.last_name, COUNT(c.customer_number) AS customer_count
+FROM employees e
+JOIN customers c ON e.employee_number = c.sales_rep_employee_number
+GROUP BY e.employee_number, e.first_name, e.last_name
+HAVING AVG(c.credit_limit) > 90000
+ORDER BY customer_count DESC;
+""", conn)
+
 
 # STEP 7
 # Replace None with your code
-df_product_sold = None
+df_product_sold = pd.read_sql("""
+SELECT p.product_name, COUNT(od.order_number) AS numorders, SUM(od.quantity_ordered) AS totalunits
+FROM products p
+JOIN orderdetails od ON p.product_code = od.product_code
+GROUP BY p.product_code, p.product_name
+ORDER BY totalunits DESC;
+""", conn)
 
 # STEP 8
 # Replace None with your code
