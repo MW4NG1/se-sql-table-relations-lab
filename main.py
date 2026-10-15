@@ -80,11 +80,25 @@ ORDER BY totalunits DESC;
 
 # STEP 8
 # Replace None with your code
-df_total_customers = None
+df_total_customers = pd.read_sql("""
+SELECT p.product_name, p.product_code, COUNT(DISTINCT o.customer_number) AS numpurchasers
+FROM products p
+JOIN orderdetails od ON p.product_code = od.product_code
+JOIN orders o ON od.order_number = o.order_number
+GROUP BY p.product_code, p.product_name
+ORDER BY numpurchasers DESC;
+""", conn)
 
 # STEP 9
 # Replace None with your code
-df_customers = None
+df_customers = pd.read_sql("""
+SELECT COUNT(c.customer_number) AS n_customers, o.id AS office_code, o.city
+FROM offices o
+JOIN employees e ON o.id = e.office_id
+JOIN customers c ON e.employee_number = c.sales_rep_employee_number
+GROUP BY o.id, o.city
+ORDER BY n_customers DESC;
+""", conn)
 
 # STEP 10
 # Replace None with your code
