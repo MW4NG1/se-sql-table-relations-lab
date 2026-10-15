@@ -30,7 +30,12 @@ HAVING COUNT(e.id) = 0;
 
 # STEP 3
 # Replace None with your code
-df_employee = None
+df_employee = pd.read_sql("""
+SELECT e.first_name, e.last_name, o.city, o.state
+FROM employees e
+LEFT JOIN offices o ON e.office_id = o.id
+ORDER BY e.first_name, e.last_name;
+""", conn)
 
 # STEP 4
 # Replace None with your code
