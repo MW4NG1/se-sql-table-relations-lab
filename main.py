@@ -39,7 +39,13 @@ ORDER BY e.first_name, e.last_name;
 
 # STEP 4
 # Replace None with your code
-df_contacts = None
+df_contacts = pd.read_sql("""
+SELECT c.contact_first_name, c.contact_last_name, c.phone, c.sales_rep_employee_number
+FROM customers c
+LEFT JOIN orders o ON c.customer_number = o.customer_number
+WHERE o.order_number IS NULL
+ORDER BY c.contact_last_name;
+""", conn)
 
 # STEP 5
 # Replace None with your code
