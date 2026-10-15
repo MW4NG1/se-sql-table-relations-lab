@@ -49,7 +49,12 @@ ORDER BY c.contact_last_name;
 
 # STEP 5
 # Replace None with your code
-df_payment = None
+df_payment = pd.read_sql("""
+SELECT c.contact_first_name, c.contact_last_name, p.amount, p.payment_date
+FROM customers c
+JOIN payments p ON c.customer_number = p.customer_number
+ORDER BY CAST(p.amount AS REAL) DESC;
+""", conn)
 
 # STEP 6
 # Replace None with your code
