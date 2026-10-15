@@ -20,7 +20,13 @@ WHERE o.city = 'Boston';
 
 # STEP 2
 # Replace None with your code
-df_zero_emp = None
+df_zero_emp = pd.read_sql("""
+SELECT o.id, o.city 
+FROM offices o
+LEFT JOIN employees e ON o.id = e.office_id
+GROUP BY o.id
+HAVING COUNT(e.id) = 0;
+""", conn)
 
 # STEP 3
 # Replace None with your code
